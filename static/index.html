@@ -60,7 +60,7 @@
 
           try {
             // Make a request to the protected backend route
-            const response = await fetch(`http://127.0.0.1:8000/users?session_id=${session.id}`, {
+            const response = await fetch(`/users?session_id=${session.id}`, {
               headers: {
                 'Authorization': `Bearer ${sessionToken}`,
                 'Content-Type': 'application/json',
