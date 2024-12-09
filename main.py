@@ -23,11 +23,11 @@ clerk_publishable_key:str = os.environ.get('CLERK_PUBLISHABLE_KEY')
 
 # Get index file
 @app.get("/",
-         tags=["test"], 
+         tags=["/"], 
          summary="Get index file", 
          response_model= str)
 async def get_index(request:Request):
-    return templates.TemplateResponse("login.html", 
+    return templates.TemplateResponse("index.html", 
                                       {"request": request, 
                                        "clerk_publishable_key": clerk_publishable_key, 
                                        "clerk_instance_url": clerk_instance_url})
