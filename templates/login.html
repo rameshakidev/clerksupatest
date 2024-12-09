@@ -15,9 +15,9 @@
     <script
       async
       crossorigin="anonymous"
-      data-clerk-publishable-key="pk_test_Y29ycmVjdC13YWxsZXllLTE2LmNsZXJrLmFjY291bnRzLmRldiQ"
+      data-clerk-publishable-key="{{clerk_publishable_key}}"
       onload="window.Clerk.load()"
-      src="https://correct-walleye-16.clerk.accounts.dev/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
+      src="https://{{clerk_instance_url}}/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
       type="text/javascript"
     ></script>
 
@@ -92,5 +92,8 @@
         }
       });
     </script>
+    <div id="">
+      
+    </div>
   </body>
 </html>

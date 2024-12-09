@@ -3,13 +3,11 @@ from supabase import create_client, Client
 from data.user_details import UserDetails
 
 class SupabaseHelper:
-    supabaseURL:str = 'https://ehgvhvtkautoneuqhpic.supabase.co'
-    supabaseKey:str = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVoZ3ZodnRrYXV0b25ldXFocGljIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjg5Mzc2MDcsImV4cCI6MjA0NDUxMzYwN30.L4igPTVpL5Pc2WchEFYyTiOHdvFRq25rPwkOFHafaBE'
     supabaseClient:Client
 
-    def __init__(self)->None:
-        #self.supabaseURL = os.environ.get("SUPABASE_URL")
-        #self.supabaseKey = os.environ.get("SUPABASE_KEY")
+    def __init__(self, supabaseURL:str, supabaseKey:str)->None:
+        self.supabaseURL = supabaseURL
+        self.supabaseKey = supabaseKey
         #print(f'URL is {self.supabaseURL} and Key is {self.supabaseKey}')
         self.supabaseClient = create_client(self.supabaseURL, self.supabaseKey)
 

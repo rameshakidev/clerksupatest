@@ -6,14 +6,13 @@ from  jwt.algorithms import RSAAlgorithm
 
 class ClerkHelper:
 
-    CLERK_SECRET_KEY = 'sk_test_CfDapZSiVcFnvjhhXPAK5MTz7KENnDuWTbh2ZsNzM8'
     bearer_token:str
     template_id:str
     client:Clerk
 
-    def __init__(self, template_id:str=None):
+    def __init__(self, clerk_secret_key:str, template_id:str=None):
         self.template_id = "supabase" if (template_id == None) else template_id
-        self.client = Clerk(bearer_auth=self.CLERK_SECRET_KEY)
+        self.client = Clerk(bearer_auth=clerk_secret_key)
 
 
     def getJWTTemplateToken(self, session_id:str, template_id=None):
