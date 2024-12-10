@@ -54,6 +54,10 @@
           document.getElementById("session-id").innerHTML = `${session.id}`
           document.getElementById("bearer-token").innerHTML = `${sessionToken}`
 
+          // Mount the Clerk user button
+          const userButtonDiv = document.getElementById("user-button");
+          Clerk.mountUserButton(userButtonDiv);
+
           try {
             // Make a request to the protected backend route
             const response = await fetch(`/users?session_id=${session.id}`, {
@@ -71,10 +75,6 @@
             console.error('Error calling API:', error);
             document.getElementById("api-response").textContent = `Error calling API: ${error.message}`;
           }
-
-          // Mount the Clerk user button
-          const userButtonDiv = document.getElementById("user-button");
-          Clerk.mountUserButton(userButtonDiv);
 
         } else {
           // User is not authenticated
