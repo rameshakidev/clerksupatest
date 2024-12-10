@@ -68,9 +68,27 @@
             });
 
             const data = await response.json();
-            console.log('API Response:', data['message']);
+            console.log('API Response:', data);
             // Display the API response on the page
-            document.getElementById("api-response").textContent = `FASTAPI Response: ${JSON.stringify(data)}`;
+            table = document.getElementById("userInfoTable");
+            var tbody = document.createElement("tbody");
+            table.appendChild(tbody);
+            data.forEach(function(items) {
+              var row = document.createElement("tr");
+              var userid = document.createElement("td");
+              userid.textContent = items.user_id;
+              userid.style = "border:1px solid; max-width:500px";
+              row.appendChild(userid);
+              var name = document.createElement("td");
+              name.textContent = items.name
+              name.style = "border:1px solid; max-width:500px";
+              row.appendChild(name);
+              var address = document.createElement("td");
+              address.textContent = items.address
+              address.style = "border:1px solid; max-width:500px";
+              row.appendChild(address);
+              tbody.appendChild(row);
+            });
           } catch (error) {
             console.error('Error calling API:', error);
             document.getElementById("api-response").textContent = `Error calling API: ${error.message}`;
@@ -92,7 +110,7 @@
     </div>          
     <div id="app">
       <div id="clerkInfo">
-        <p/>
+        <h2> Clerk User Info </h2>
         <table style="border:1px solid; max-width:1500px">
           <tr>
             <td style="border:1px solid; max-width:200px">User Id</td>
@@ -107,7 +125,7 @@
             <td style="border:1px solid; max-width:1300px" id="user-address"></td>
           </tr>
         </table>  
-        <p/>
+        <h2> Clerk Session Info </h2>
         <table style="border:1px solid; max-width:1500px">
           <tr>
             <td style="border:1px solid; max-width:200px">Session Id</td>
@@ -120,6 +138,8 @@
         </table>        
       </div> 
       <div id="supabaseInfo">
+        <h2> Supabase Data </h2>
+        <table style="border:1px solid; max-width:1500px" id = "userInfoTable"></table>
         <p id="api-response">
         </p>
       </div>
