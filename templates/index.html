@@ -47,16 +47,12 @@
           console.log('Session Token:', sessionToken);
 
           // Update the DOM with user and token information
-          document.getElementById("app").innerHTML = `
-            <div id="user-button"></div>
-            <p id="login-success">
-                User ${user.firstName} ${user.lastName} with email ${user.emailAddresses[0].emailAddress} logged in
-            </p>
-            <p id="login-success-token">
-                Bearer Token is: ${sessionToken}
-            </p>
-            <p id="api-response"></p>
-          `;
+          document.getElementById("user-id").innerHTML = `${user.id}`
+          document.getElementById("user-name").innerHTML = `${user.firstName} ${user.lastName}`
+          document.getElementById("user-address").innerHTML = `${user.emailAddresses[0].emailAddress}`
+
+          document.getElementById("session-id").innerHTML = `${session.id}`
+          document.getElementById("bearer-token").innerHTML = `${sessionToken}`
 
           try {
             // Make a request to the protected backend route
@@ -92,8 +88,41 @@
         }
       });
     </script>
-    <div id="">
-      
+    <div id="user-button">
+    </div>          
+    <div id="app">
+      <div id="clerkInfo">
+        <p/>
+        <table style="border:1px solid; max-width:1500px">
+          <tr>
+            <td style="border:1px solid; max-width:200px">User Id</td>
+            <td style="border:1px solid; max-width:1300px" id="user-id"></td>
+          </tr>
+          <tr>
+            <td style="border:1px solid; max-width:200px">User Name</td>
+            <td style="border:1px solid; max-width:1300px" id="user-name"></td>
+          </tr>
+          <tr>
+            <td style="border:1px solid; max-width:200px">User Address</td>
+            <td style="border:1px solid; max-width:1300px" id="user-address"></td>
+          </tr>
+        </table>  
+        <p/>
+        <table style="border:1px solid; max-width:1500px">
+          <tr>
+            <td style="border:1px solid; max-width:200px">Session Id</td>
+            <td style="border:1px solid; max-width: 300px" id="session-id"></td>
+          </tr>
+          <tr>
+            <td style="border:1px solid; max-width:200px">Bearer Token</td>
+            <td style="border:1px solid; max-width:1300px; word-wrap:break-word" id="bearer-token"></td>
+          </tr>
+        </table>        
+      </div> 
+      <div id="supabaseInfo">
+        <p id="api-response">
+        </p>
+      </div>
     </div>
   </body>
 </html>
