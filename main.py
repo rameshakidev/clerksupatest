@@ -20,6 +20,8 @@ supabaseKey:str = os.environ.get('SUPABASE_KEY')
 clerk_secret_key:str = os.environ.get('CLERK_SECRET_KEY')
 clerk_instance_url:str = os.environ.get('CLERK_INSTANCE_URL')
 clerk_publishable_key:str = os.environ.get('CLERK_PUBLISHABLE_KEY')
+url_to_invoke:str = os.environ.get('URL_TO_INVOKE')
+token_to_use:str = os.environ.get("TOKEN_TO_USE")
 
 # Get index file
 @app.get("/",
@@ -30,7 +32,9 @@ async def get_index(request:Request):
     return templates.TemplateResponse("index.html", 
                                       {"request": request, 
                                        "clerk_publishable_key": clerk_publishable_key, 
-                                       "clerk_instance_url": clerk_instance_url})
+                                       "clerk_instance_url": clerk_instance_url,
+                                       "url_to_invoke":url_to_invoke,
+                                       "token_to_use":token_to_use})
 
 # Get information about all users
 @app.get("/users",

@@ -60,14 +60,17 @@
           const userButtonDiv = document.getElementById("user-button");
           Clerk.mountUserButton(userButtonDiv);
 
+          {% if token_to_use == 'CLERK_TOKEN' %}
+            const sessionTokenVal = sessionToken
+          {% else %}
+            const sessionTokenVal = "{{token_to_use}}"
+          {% endif %}
+          const call_url = "{{url_to_invoke}}"
           try {
             // Make a request to the protected backend route
-            const call_url = `https://mayihelp.onrender.com/file/1`
-            //const call_url = `http://127.0.0.1:8080/file/1`
             const response = await fetch(call_url+`?session_id=${session.id}`, {
               headers: {
-                'Authorization': `Bearer ${basicSessionToken}`,
-                //'Authorization': `Bearer ${sessionToken}`,
+                'Authorization': `Bearer ${sessionTokenVal}`,
                 'Content-Type': 'application/json',
               },
             });
