@@ -43,6 +43,8 @@
 
           // Get the session token for API authentication
           const sessionToken = await Clerk.session.getToken();
+          // Set the basic session token value.
+          const basicSessionToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhbGciOiJIUzI1NiIsInVzZXJJRCI6ImFraWRldl91c2VyIiwiZXhwaXJ5IjoxNzM0Mzc2NjYwLjc3Njg4Nzd9.qSMQ1et6Jk67UyVBnVAE3FIDHDnI4AykH1ycyOt5cqk`;
 
           console.log('Session Token:', sessionToken);
 
@@ -60,9 +62,12 @@
 
           try {
             // Make a request to the protected backend route
-            const response = await fetch(`/users?session_id=${session.id}`, {
+            const call_url = `https://mayihelp.onrender.com/file/1`
+            //const call_url = `http://127.0.0.1:8080/file/1`
+            const response = await fetch(call_url+`?session_id=${session.id}`, {
               headers: {
-                'Authorization': `Bearer ${sessionToken}`,
+                'Authorization': `Bearer ${basicSessionToken}`,
+                //'Authorization': `Bearer ${sessionToken}`,
                 'Content-Type': 'application/json',
               },
             });
@@ -76,7 +81,7 @@
             data.forEach(function(items) {
               var row = document.createElement("tr");
               var userid = document.createElement("td");
-              userid.textContent = items.user_id;
+              userid.textContent = items.id;
               userid.style = "border:1px solid; max-width:500px";
               row.appendChild(userid);
               var name = document.createElement("td");
@@ -84,7 +89,7 @@
               name.style = "border:1px solid; max-width:500px";
               row.appendChild(name);
               var address = document.createElement("td");
-              address.textContent = items.address
+              address.textContent = items.description
               address.style = "border:1px solid; max-width:500px";
               row.appendChild(address);
               tbody.appendChild(row);
