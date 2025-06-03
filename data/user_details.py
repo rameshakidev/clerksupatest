@@ -11,5 +11,5 @@ class UserDetails:
         self.email = email
 
     def getReponseUser(self)->UserObject:
-        return UserObject(user_id=self.userId, name=self.name, email=self.email)
+        return UserObject(id=self.userId, name=self.name, email=self.email)
     
