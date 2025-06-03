@@ -20,28 +20,19 @@ supabaseKey:str = os.environ.get('SUPABASE_KEY')
 clerk_dev_instance_url:str = os.environ.get('CLERK_DEV_INSTANCE_URL')
 clerk_dev_publishable_key:str = os.environ.get('CLERK_DEV_PUBLISHABLE_KEY')
 clerk_dev_secret_key:str = os.environ.get('CLERK_DEV_SECRET_KEY')
-clerk_prod_instance_url:str = os.environ.get('CLERK_PROD_INSTANCE_URL')
-clerk_prod_publishable_key:str = os.environ.get('CLERK_PROD_PUBLISHABLE_KEY')
-clerk_prod_secret_key:str = os.environ.get('CLERK_PROD_SECRET_KEY')
 url_to_invoke:str = os.environ.get('URL_TO_INVOKE')
 token_to_use:str = os.environ.get("TOKEN_TO_USE")
 
 # Get index file
-@app.get("/{env}",
+@app.get("/",
          tags=["/"], 
          summary="Get index file", 
          response_model= str)
-async def get_index(request:Request, env:str | None='development'):
-    match(env):
-        case 'prod':
-            environment = 'production'
-            clerk_instance_url = clerk_prod_instance_url
-            clerk_publishable_key = clerk_prod_publishable_key
-        case 'dev'| _:
-            environment = 'development'
-            clerk_instance_url = clerk_dev_instance_url
-            clerk_publishable_key = clerk_dev_publishable_key
-    url_to_invoke = f'get/users/{env}'
+async def get_index(request:Request):
+    environment = 'development'
+    clerk_instance_url = clerk_dev_instance_url
+    clerk_publishable_key = clerk_dev_publishable_key
+    url_to_invoke = f'get/users'
     return templates.TemplateResponse("index.html", 
                                       {"request": request, 
                                        "environment": environment,
@@ -50,17 +41,13 @@ async def get_index(request:Request, env:str | None='development'):
                                        "url_to_invoke":url_to_invoke})
 
 # Get information about all users
-@app.get("/get/users/{env}",
+@app.get("/get/users",
          tags=["Users"], 
          dependencies=[Depends(HTTPBearer())],
          summary="Get information about all users in the system", 
          response_model= list[UserObject])
-async def get_users(request:Request, session_id:str, env:str | None='development'):
-    match(env):
-        case 'prod':
-            clerk_secret_key = clerk_prod_secret_key
-        case 'dev' | _:
-            clerk_secret_key = clerk_dev_secret_key
+async def get_users(request:Request, session_id:str):
+    clerk_secret_key = clerk_dev_secret_key
     clerkHelper = ClerkHelper(clerk_secret_key)
     signedIn = clerkHelper.is_signed_in(request, session_id)
     if (not signedIn):
