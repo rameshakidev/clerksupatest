@@ -9,115 +9,120 @@
 
   <body>
     <!-- Main application container -->
-    <div id="app"></div>
-
-    <!-- Clerk script tag: Loads the Clerk JavaScript library -->
-    <script
-      async
-      crossorigin="anonymous"
-      data-clerk-publishable-key="{{clerk_publishable_key}}"
-      onload="window.Clerk.load()"
-      src="https://{{clerk_instance_url}}/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
-      type="text/javascript"
-    ></script>
-
-    <script>
-      // Main application logic
-      window.addEventListener("load", async function () {
-        // Initialize Clerk
-        await Clerk.load();
-
-        if (Clerk.user) {
-          // User is authenticated
-          const user = Clerk.user;
-          console.log('User ID:', user.id);
-          console.log('First Name:', user.firstName);
-          console.log('Last Name:', user.lastName);
-          console.log('Email Addresses:', user.emailAddresses[0].emailAddress);
-
-          const session = Clerk.session;
-
-          console.log('Session ID:', session.id);
-          console.log('User ID:', session.userId);
-          console.log('Session Expires At:', session.expiresAt);
-
-          // Get the session token for API authentication
-          const sessionToken = await Clerk.session.getToken();
-          // Set the basic session token value.
-          const basicSessionToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhbGciOiJIUzI1NiIsInVzZXJJRCI6ImFraWRldl91c2VyIiwiZXhwaXJ5IjoxNzM0Mzc2NjYwLjc3Njg4Nzd9.qSMQ1et6Jk67UyVBnVAE3FIDHDnI4AykH1ycyOt5cqk`;
-
-          console.log('Session Token:', sessionToken);
-
-          // Update the DOM with user and token information
-          document.getElementById("user-id").innerHTML = `${user.id}`
-          document.getElementById("user-name").innerHTML = `${user.firstName} ${user.lastName}`
-          document.getElementById("user-address").innerHTML = `${user.emailAddresses[0].emailAddress}`
-
-          document.getElementById("session-id").innerHTML = `${session.id}`
-          document.getElementById("bearer-token").innerHTML = `${sessionToken}`
-
-          // Mount the Clerk user button
-          const userButtonDiv = document.getElementById("user-button");
-          Clerk.mountUserButton(userButtonDiv);
-
-          {% if token_to_use == 'CLERK_TOKEN' %}
-            const sessionTokenVal = sessionToken
-          {% else %}
-            const sessionTokenVal = "{{token_to_use}}"
-          {% endif %}
-          const call_url = "{{url_to_invoke}}"
-          try {
-            // Make a request to the protected backend route
-            const response = await fetch(call_url+`?session_id=${session.id}`, {
-              headers: {
-                'Authorization': `Bearer ${sessionTokenVal}`,
-                'Content-Type': 'application/json',
-              },
-            });
-
-            const data = await response.json();
-            console.log('API Response:', data);
-            // Display the API response on the page
-            table = document.getElementById("userInfoTable");
-            var tbody = document.createElement("tbody");
-            table.appendChild(tbody);
-            data.forEach(function(items) {
-              var row = document.createElement("tr");
-              var userid = document.createElement("td");
-              userid.textContent = items.id;
-              userid.style = "border:1px solid; max-width:500px";
-              row.appendChild(userid);
-              var name = document.createElement("td");
-              name.textContent = items.name
-              name.style = "border:1px solid; max-width:500px";
-              row.appendChild(name);
-              var address = document.createElement("td");
-              address.textContent = items.description
-              address.style = "border:1px solid; max-width:500px";
-              row.appendChild(address);
-              tbody.appendChild(row);
-            });
-          } catch (error) {
-            console.error('Error calling API:', error);
-            document.getElementById("api-response").textContent = `Error calling API: ${error.message}`;
-          }
-
-        } else {
-          // User is not authenticated
-          document.getElementById("app").innerHTML = `
-            <div id="sign-in"></div>
-          `;
-
-          // Mount the Clerk sign-in component
-          const signInDiv = document.getElementById("sign-in");
-          Clerk.mountSignIn(signInDiv);
-        }
-      });
-    </script>
-    <div id="user-button">
-    </div>          
     <div id="app">
+      <!-- Clerk script tag: Loads the Clerk JavaScript library -->
+      <script
+        async
+        crossorigin="anonymous"
+        data-clerk-publishable-key="{{clerk_publishable_key}}"
+        onload="window.Clerk.load()"
+        src="https://{{clerk_instance_url}}/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
+        type="text/javascript"
+      ></script>
+
+      <script>
+        // Main application logic
+        window.addEventListener("load", async function () {
+          // Initialize Clerk
+          await Clerk.load();
+
+          if (Clerk.user) {
+            // User is authenticated
+            const user = Clerk.user;
+            console.log('User ID:', user.id);
+            console.log('First Name:', user.firstName);
+            console.log('Last Name:', user.lastName);
+            console.log('Email Addresses:', user.emailAddresses[0].emailAddress);
+
+            const session = Clerk.session;
+
+            console.log('Session ID:', session.id);
+            console.log('User ID:', session.userId);
+            console.log('Session Expires At:', session.expiresAt);
+
+            // Get the session token for API authentication
+            const sessionToken = await Clerk.session.getToken();
+            // Set the basic session token value.
+            const basicSessionToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhbGciOiJIUzI1NiIsInVzZXJJRCI6ImFraWRldl91c2VyIiwiZXhwaXJ5IjoxNzM0Mzc2NjYwLjc3Njg4Nzd9.qSMQ1et6Jk67UyVBnVAE3FIDHDnI4AykH1ycyOt5cqk`;
+
+            console.log('Session Token:', sessionToken);
+
+            // Update the DOM with user and token information
+            document.getElementById("user-id").innerHTML = `${user.id}`
+            document.getElementById("user-name").innerHTML = `${user.firstName} ${user.lastName}`
+            document.getElementById("user-email").innerHTML = `${user.emailAddresses[0].emailAddress}`
+
+            document.getElementById("session-id").innerHTML = `${session.id}`
+            document.getElementById("bearer-token").innerHTML = `${sessionToken}`
+
+            // Mount the Clerk user button
+            const userButtonDiv = document.getElementById("user-button");
+            Clerk.mountUserButton(userButtonDiv);
+            const sessionTokenVal = sessionToken
+            const call_url = "{{url_to_invoke}}"
+            try {
+              // Make a request to the protected backend route
+              const response = await fetch(call_url+`?session_id=${session.id}`, {
+                headers: {
+                  'Authorization': `Bearer ${sessionTokenVal}`,
+                  'Content-Type': 'application/json',
+                },
+              });
+
+              const data = await response.json();
+              console.log('API Response:', data);
+              // Display the API response on the page
+              table = document.getElementById("userInfoTable");
+              var tbody = document.createElement("tbody");
+              table.appendChild(tbody);
+              data.forEach(function(items) {
+                var row = document.createElement("tr");
+                var userid = document.createElement("td");
+                userid.textContent = items.id;
+                userid.style = "border:1px solid; max-width:500px";
+                row.appendChild(userid);
+                var name = document.createElement("td");
+                name.textContent = items.name
+                name.style = "border:1px solid; max-width:500px";
+                row.appendChild(name);
+                var address = document.createElement("td");
+                address.textContent = items.email
+                address.style = "border:1px solid; max-width:500px";
+                row.appendChild(address);
+                tbody.appendChild(row);
+              });
+            } catch (error) {
+              console.error('Error calling API:', error);
+              document.getElementById("api-response").textContent = `Error calling API: ${error.message}`;
+            }
+
+          } else {
+            // User is not authenticated
+            document.getElementById("app").innerHTML = `
+              <div id="sign-in"></div>
+            `;
+
+            // Mount the Clerk sign-in component
+            const signInDiv = document.getElementById("sign-in");
+            Clerk.mountSignIn(signInDiv);
+          }
+        });
+      </script>
+
+      <div id="user-button"></div>          
+
       <div id="clerkInfo">
+        <h2> Environment </h2>
+      </div>
+      <div id="env">
+        <table style="border:1px solid; max-width:1500px">
+          <tr>
+            <td style="border:1px solid; max-width:200px">Selected Environment</td>
+            <td style="border:1px solid; max-width: 300px">{{environment}}</td>
+          </tr>
+        </table>        
+      </div>          
+        <div id="clerkInfo">
         <h2> Clerk User Info </h2>
         <table style="border:1px solid; max-width:1500px">
           <tr>
@@ -129,8 +134,8 @@
             <td style="border:1px solid; max-width:1300px" id="user-name"></td>
           </tr>
           <tr>
-            <td style="border:1px solid; max-width:200px">User Address</td>
-            <td style="border:1px solid; max-width:1300px" id="user-address"></td>
+            <td style="border:1px solid; max-width:200px">User Email</td>
+            <td style="border:1px solid; max-width:1300px" id="user-email"></td>
           </tr>
         </table>  
         <h2> Clerk Session Info </h2>

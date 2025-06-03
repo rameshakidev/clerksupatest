@@ -22,14 +22,14 @@ class SupabaseHelper:
 
     def get_user_details(self, jwtTemplate:str)->list[UserDetails]:
         self.supabaseClient.postgrest.auth(jwtTemplate)
-        query_result = self.supabaseClient.table("TestTable_Ignore").select("*").execute()
+        query_result = self.supabaseClient.table("AppUser").select("*").execute()
         if (len(query_result.data) > 0):
             users = []
             for nextUser in query_result.data:
                 usrInfo:UserDetails = UserDetails(
                     userId=nextUser["user_id"], 
                     name=nextUser["name"],
-                    address=nextUser["address"],
+                    email=nextUser["email"],
                 )
                 users.append(usrInfo)
             return users

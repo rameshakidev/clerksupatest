@@ -10,3 +10,8 @@ env.bak/
 venv.bak/
 
 .vscode
+# Byte-code files
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
